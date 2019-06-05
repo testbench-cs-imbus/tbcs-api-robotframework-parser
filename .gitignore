@@ -1,0 +1,6 @@
+/.idea/
+/dist/
+/build/
+/.pytest_cache/
+/tbcs.config.json
+/tbcs_api_client.egg-info/

@@ -1,0 +1,19 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[[source]]
+name = "testpypi"
+url = "https://test.pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+pytest = "*"
+
+[packages]
+tbcs-api-client = {index = "https://test.pypi.org/simple/",version = "*"}
+robotframework = "*"
+
+[requires]
+python_version = "3.6"
