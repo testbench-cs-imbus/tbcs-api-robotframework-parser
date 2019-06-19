@@ -1,0 +1,3 @@
+[console_scripts]
+robot-parser = test_case_import.__main__:main
+
