@@ -2,7 +2,7 @@
 
 Aktuell wird der Wrapper noch von test.pypi.org installiert (sollte als Administrator ausgeführt werden, da nonst ggf. PATH nicht richtig gesetzt wird).
 
-CMD: `python -m pip install --user --extra-index-url https://test.pypi.org/simple/ tbcs-rf-wrapper`
+CMD: `python -m pip install --extra-index-url https://test.pypi.org/simple/ tbcs-rf-wrapper`
 
 **Importieren von Robot-Tests:**
 
