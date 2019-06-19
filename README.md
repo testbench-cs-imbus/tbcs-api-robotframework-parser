@@ -1,8 +1,11 @@
 **Installationanweisung:**
+
 Aktuell wird der Wrapper noch von test.pypi.org installiert (sollte als Administrator ausgeführt werden, da nonst ggf. PATH nicht richtig gesetzt wird).
+
 CMD: `python -m pip install --user --extra-index-url https://test.pypi.org/simple/ tbcs-rf-wrapper`
 
 **Importieren von Robot-Tests:**
+
 Um Robot-Tests in eine TestBench CS Instanz zu importieren, muss dem Parser eine JSON-Konfigurationsdatei mit folgenden Feldern übergeben werden:
 
 ```
@@ -20,4 +23,5 @@ Um Robot-Tests in eine TestBench CS Instanz zu importieren, muss dem Parser eine
 Außerdem muss dem Parser das Verzeichnis, in dem sich die zu importierenden Robot-Tests befinden übergeben werden. Der Parser importiert alle Tests, inklusive Testschritte, aus allen .robot-Files in dem gegeben Verzeichnis und allen Unterverzeichnissen.
 
 Nach korrekter Installation können Tests mit folgendem systemweiten Befehl importiert werden:
+
 CMD: `robot-parser <pfad.zu.json.config> <pfad.zu.verzeichnis.mit.robot.tests>`
