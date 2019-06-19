@@ -1,6 +1,6 @@
 **Installationanweisung:**
 
-Aktuell wird der Wrapper noch von test.pypi.org installiert (sollte als Administrator ausgeführt werden, da nonst ggf. PATH nicht richtig gesetzt wird).
+Aktuell wird der Wrapper noch von test.pypi.org installiert (sollte als Administrator ausgeführt werden, da sonst ggf. PATH nicht richtig gesetzt wird).
 
 CMD: `python -m pip install --extra-index-url https://test.pypi.org/simple/ tbcs-rf-wrapper`
 
