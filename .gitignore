@@ -3,5 +3,6 @@
 /build/
 /tests/output.xml
 /.pytest_cache/
+/*/__pycache__/
 /tbcs.config.json
 /tbcs_rf_wrapper.egg-info/
