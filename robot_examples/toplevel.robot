@@ -1,5 +1,3 @@
 *** Test Cases ***
 Example test
-    testing
-    is
-    great
+    Should Be Equal     1   1

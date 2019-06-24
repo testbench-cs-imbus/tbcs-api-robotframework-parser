@@ -1,6 +1,7 @@
 /.idea/
 /dist/
 /build/
+/tests/output.xml
 /.pytest_cache/
 /tbcs.config.json
 /tbcs_rf_wrapper.egg-info/

@@ -32,7 +32,7 @@ def main() -> int:
         connector: APIConnector = APIConnector(sys.argv[1])
         parser: RobotParser = RobotParser(connector)
         print("Parsing robot files...")
-        parser.import_tests(sys.argv[2])
+        parser.import_tests_from_directory(sys.argv[2])
         print("Parsing completed")
         return 0
 

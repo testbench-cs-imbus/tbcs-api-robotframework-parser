@@ -59,10 +59,10 @@
         },
         "tbcs-api-client": {
             "hashes": [
-                "sha256:51771491692c74ea4947739d605b07e300b843be6341e64f61d39c8c4995c51d",
-                "sha256:65200adda9045d4f2b859127a27c65917bfb298b6afd32302fc730ba9e1effaf"
+                "sha256:227e4ff91d160110fe7ce93181faf09c125c4973964b8bb28724812df180ecdb",
+                "sha256:d5fb150a929da7d3c8599ffe4767e699afaa79548d24642b80bfc788a3cd9286"
             ],
-            "version": "==0.10"
+            "version": "==0.12"
         },
         "urllib3": {
             "hashes": [
