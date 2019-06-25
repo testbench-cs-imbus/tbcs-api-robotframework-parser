@@ -15,8 +15,12 @@ class RobotListener:
     __connector: APIConnector
     __parser: RobotParser
 
-    def __init__(self, connector: APIConnector = APIConnector()):
+    def __init__(self, config_file_path: str):
         self.ROBOT_LIBRARY_LISTENER = self
+        self.__connector = APIConnector(config_file_path)
+        self.__parser = RobotParser(self.__connector)
+
+    def set_connector(self, connector: APIConnector = APIConnector()):
         self.__connector = connector
         self.__parser = RobotParser(self.__connector)
 

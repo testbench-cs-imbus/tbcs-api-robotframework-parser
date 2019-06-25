@@ -6,7 +6,8 @@ from robot.api import TestSuiteBuilder
 
 def test_listener():
     connector: MockAPIConnector = MockAPIConnector()
-    listener: RobotListener = RobotListener(connector)
+    listener: RobotListener = RobotListener('../tbcs.config.json')
+    listener.set_connector(connector)
     suite = TestSuiteBuilder().build('../robot_examples/toplevel.robot')
 
     suite.run(listener=listener)

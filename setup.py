@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='tbcs_rf_wrapper',
-    version='0.9',
+    version='0.10',
     packages=find_packages(exclude=['tests']),
 
     install_requires=['requests', 'tbcs-api-client', 'robotframework'],
