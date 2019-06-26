@@ -1,4 +1,5 @@
 import hashlib
+import time
 from typing import List
 from tbcs_client import APIConnector
 from test_case_import import RobotParser
@@ -20,7 +21,7 @@ class RobotListener:
         self.__connector = APIConnector(config_file_path)
         self.__parser = RobotParser(self.__connector)
 
-    def set_connector(self, connector: APIConnector = APIConnector()):
+    def set_connector(self, connector: APIConnector):
         self.__connector = connector
         self.__parser = RobotParser(self.__connector)
 
