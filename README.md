@@ -26,11 +26,11 @@ CMD: `robot-parser <pfad.zu.json.config> <pfad.zu.verzeichnis.mit.robot.tests>`
 ## Reporten von Testergebnissen:
 Um die Testergebnisse eines oder mehrere Robot Tests in die TestBench CS importieren zu können wird ein Listener zur Verfügung gestellt. Wie auch bei anderen Listenern muss die Listener-Klasse beim Starten der Tests als Parameter übergeben werden. Zudem muss dem Listener als Konstruktorparameter der Pfad zu einer JSON-Konfigurationsdatei (wie oben) übergeben werden:
 
-CMD: `python3 -m robot --listener <pfad.zu.listener.klasse>:"<pfad.zu.json.config>" <pfad.zu.verzeichnis.mit.robot.tests>`
+CMD: `python -m robot --listener <pfad.zu.listener.klasse>:"<pfad.zu.json.config>" <pfad.zu.verzeichnis.mit.robot.tests>`
 
 Wenn das Modul global installiert wurde, könnte der Befehl auf einer Linux Umgebung folgendermaßen aussehen:
 
-CMD: `python3 -m robot --listener /usr/local/lib/python3.6/dist-packages/robot_listener/RobotListener.py:"tbcs.config.json" meineTests/`
+CMD: `python -m robot --listener /usr/local/lib/python3.6/dist-packages/robot_listener/RobotListener.py:"tbcs.config.json" meineTests/`
 
 Bei Bedarf kann das Installationsverzeichnis über die Python-Shell gefunden werden (Beispiel Ubuntu):
 ```
