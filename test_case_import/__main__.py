@@ -25,6 +25,7 @@ from test_case_import import RobotParser
 
 
 def main() -> int:
+    #TODO: Usereingabe prüfen und aussagekräftigen Fehler ausgeben.
     if len(sys.argv) < 3:
         return 1
     else:
