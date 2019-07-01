@@ -13,7 +13,7 @@ Um Robot-Tests in eine TestBench CS Instanz zu importieren, muss dem Parser eine
   "product_id": <my.product.id: Int>,                                       # z.B. 3
   "tenant_user": <my.user: String>,                                         # z.B. "demouser_xy"
   "password": <my.password: String>,                                        # z.B. "123456"
-  "use_system_proxy": <use.proxy: Boolean>,                                 # z.B. true ## muss genau dann true sein, wenn im System ein Proxy gesetzt ist, der ignoriert werden soll
+  "use_system_proxy": <use.proxy: Boolean>,                                 # z.B. true ## muss genau dann false sein, wenn im System ein Proxy gesetzt ist, der ignoriert werden soll
   "truststore_path": <my.truststore: String>                                # z.B. "/usr/lib/python3/dist-packages/certifi/cacert.pem" ## wird auf Windows ignoriert, Feld muss aber trotzdem vorhanden sein
 }
 ```
