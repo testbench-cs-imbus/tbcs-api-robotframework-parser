@@ -20,7 +20,7 @@ class RobotParser:
     def import_tests_from_directory(self, test_root_path: str):
         for dirName, subdirList, fileList in os.walk(test_root_path):
             for fileName in fileList:
-                if fileName.endswith('.robot'):
+                if fileName.lower().endswith('.robot'):
                     self.import_tests_from_file(os.path.join(dirName, fileName))
 
     def import_tests_from_file(self, file_path: str):
