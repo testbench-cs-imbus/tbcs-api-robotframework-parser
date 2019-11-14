@@ -1,5 +1,4 @@
 import hashlib
-import time
 from typing import List
 from tbcs_client import APIConnector
 from test_case_import import RobotParser
@@ -38,7 +37,7 @@ class RobotListener:
 
     def end_keyword(self, name: str, attributes: dict):
         test_step_status: str = APIConnector.test_step_status_passed if attributes['status'] == 'PASS' else APIConnector.test_step_status_failed
-        for test_step in self.__current_execution['testStepBlocks'][2]['steps']:
+        for test_step in self.__current_execution['testSequence']['testStepBlocks'][2]['steps']:
             if attributes['kwname'] == test_step['description']:
                 self.__connector.report_step_result(self.__current_test_case_id, str(self.__current_execution['id']), str(test_step['id']), test_step_status)
                 return

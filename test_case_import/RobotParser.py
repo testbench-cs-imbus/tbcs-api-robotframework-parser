@@ -26,18 +26,20 @@ class RobotParser:
     def import_tests_from_file(self, file_path: str):
         path_elements: List[str] = file_path.split('/')
         file_name: str = path_elements[len(path_elements) - 1]
+        if not file_name.endswith('.robot'):
+            return
 
         test_cases = TestCaseFile(parent=None, source=file_path).populate()
         for test_case in test_cases.testcase_table.tests:
             external_id: str = hashlib.sha256((test_case.name + file_name).encode('utf-8')).hexdigest()
             steps: List[str] = []
             for step in test_case.steps:
-                steps.append(step.name)
+                steps.append(f'{step.name}')
             try:
                 test: dict = self.__tbcs_api_connector.get_test_case_by_external_id(external_id)
-                self.update_test_steps(str(test['id']), steps, test['testStepBlocks'][2]['steps'])
+                self.update_test_steps(str(test['id']), steps, test['testSequence']['testStepBlocks'][2]['steps'])
             except ItemNotFoundError:
-                self.__tbcs_api_connector.create_test_case(test_case.name, external_id, steps)
+                self.__tbcs_api_connector.create_test_case(test_case.name, APIConnector.test_case_type_structured, external_id, steps)
 
     """ Method to update test steps for an existing test case if necessary """
     def update_test_steps(self, test_case_id: str, steps_new: List[str], steps_old: List[dict]):

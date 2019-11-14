@@ -25,7 +25,9 @@ from test_case_import import RobotParser
 
 
 def main() -> int:
-    if len(sys.argv) < 3:
+    if len(sys.argv) == 1 or len(sys.argv):
+        print()
+    elif len(sys.argv) < 3:
         return 1
     else:
         print("Initialising parser...")
