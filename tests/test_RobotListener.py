@@ -19,6 +19,7 @@ def test_listener():
     assert(connector.test_cases == [{
         'id': 0,
         'name': 'Example test',
+        'testCaseType': connector.test_case_type_structured,
         'externalId': hashlib.sha256(('Example test' + 'toplevel.robot').encode('utf-8')).hexdigest(),
         'testSteps': [{
             'id': 0,
@@ -27,12 +28,14 @@ def test_listener():
         'executions': [{
             'id': 0,
             'result': 'Passed',
-            'testStepBlocks': [{}, {}, {
-                'steps': [{
-                    'id': 0,
-                    'description': 'Should Be Equal',
-                    'result': 'Passed'
+            'testSequence': {
+                'testStepBlocks': [{}, {}, {
+                    'steps': [{
+                        'id': 0,
+                        'description': 'Should Be Equal',
+                        'result': 'Passed'
+                    }]
                 }]
-            }]
+            }
         }]
     }])

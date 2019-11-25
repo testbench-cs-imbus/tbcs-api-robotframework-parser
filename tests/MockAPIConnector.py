@@ -50,6 +50,7 @@ class MockAPIConnector(tbcs_client.APIConnector):
     def create_test_case(
             self,
             test_case_name: str,
+            test_case_type: str,
             external_id: str,
             test_steps: List[str]
     ) -> str:
@@ -58,6 +59,7 @@ class MockAPIConnector(tbcs_client.APIConnector):
         test_case: dict =  {
             'id': new_index,
             'name': test_case_name,
+            'testCaseType': test_case_type,
             'externalId': external_id,
             'testSteps': [],
             'executions': []
@@ -91,12 +93,14 @@ class MockAPIConnector(tbcs_client.APIConnector):
                 execution: dict = {
                     'id': new_index,
                     'result': self.test_status_in_progress,
-                    'testStepBlocks': [{}, {}, {
-                        'steps': []
-                    }]
+                    'testSequence': {
+                        'testStepBlocks': [{}, {}, {
+                            'steps': []
+                        }]
+                    }
                 }
                 for step in test_case['testSteps']:
-                    execution['testStepBlocks'][2]['steps'].append({
+                    execution['testSequence']['testStepBlocks'][2]['steps'].append({
                         'id': step['id'],
                         'description': step['description']
                     })
@@ -129,7 +133,7 @@ class MockAPIConnector(tbcs_client.APIConnector):
             if str(test_case['id']) == test_case_id:
                 for execution in test_case['executions']:
                     if str(execution['id']) == execution_id:
-                        for step in execution['testStepBlocks'][2]['steps']:
+                        for step in execution['testSequence']['testStepBlocks'][2]['steps']:
                             if str(step['id']) == test_step_id:
                                 step['result'] = result
                                 return
