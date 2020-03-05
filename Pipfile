@@ -12,7 +12,7 @@ verify_ssl = true
 pytest = "*"
 
 [packages]
-tbcs-api-client = {index = "https://test.pypi.org/simple/",version = "*"}
+tbcs-api-client = "==0.15"
 robotframework = "*"
 
 [requires]

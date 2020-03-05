@@ -1,6 +1,6 @@
 from typing import List
 from test_case_import import RobotParser
-from . import MockAPIConnector
+from tests.MockAPIConnector import MockAPIConnector
 
 
 def test_import_tests_from_directory():
