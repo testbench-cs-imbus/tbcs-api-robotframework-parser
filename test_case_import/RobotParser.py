@@ -24,9 +24,10 @@ class RobotParser:
                     self.import_tests_from_file(os.path.join(dirName, fileName))
 
     def import_tests_from_file(self, file_path: str):
-        path_elements: List[str] = file_path.split('/')
+        file_path = os.path.normpath(file_path)
+        path_elements: List[str] = file_path.split('\\') if os.name == 'nt' else file_path.split('/')
         file_name: str = path_elements[len(path_elements) - 1]
-        if not file_name.endswith('.robot'):
+        if not file_name.lower().endswith('.robot'):
             return
 
         test_cases = TestCaseFile(parent=None, source=file_path).populate()
