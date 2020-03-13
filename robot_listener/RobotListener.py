@@ -1,4 +1,5 @@
 import hashlib
+import os
 from typing import List
 from tbcs_client import APIConnector
 from test_case_import import RobotParser
@@ -25,7 +26,8 @@ class RobotListener:
         self.__parser = RobotParser(self.__connector)
 
     def start_suite(self, name: str, attributes: dict):
-        path_elements: List[str] = attributes['source'].split('/')
+        file_path = os.path.normpath(attributes['source'])
+        path_elements: List[str] = file_path.split('\\') if os.name == 'nt' else file_path.split('/')
         self.__current_file: str = path_elements[len(path_elements) - 1]
         self.__parser.import_tests_from_file(attributes['source'])
 
