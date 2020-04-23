@@ -32,7 +32,7 @@ Wenn das Modul global installiert wurde, könnte der Befehl auf einer Linux Umge
 
 CMD: `robot --listener /usr/local/lib/python3.6/dist-packages/robot_listener/RobotListener.py:"tbcs.config.json" meineTests/`
 
-**Hinweis:** Auf Windowssystemen sollten die Pfade für den Listener ebenfalls mit '/', und nicht mi '\' angegeben werden.
+**Hinweis:** Auf Windowssystemen sollten die Pfade für den Listener ebenfalls mit '/', und nicht mit '\\' angegeben werden.
 
 CMD: `robot --listener C:/temp/RobotListener.py:"C:/temp/tbcs.config.json" C:\temp\meineTests\`
 
