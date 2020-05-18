@@ -1,43 +1,52 @@
-# Robot Framework Integration für TestBench CS
-## Installationanweisung:
-Aktuell wird der Wrapper noch von test.pypi.org installiert (sollte als Administrator ausgeführt werden, da sonst ggf. PATH nicht richtig gesetzt wird).
+# Robot Framework Integration for TestBench CS
+## preconditions:
+Python version 3 installed and running.
+Robot Framework Version 2 installed and running.
+...
+REMARK: This Wrapper will NOT work with version 3 of Robot Framework
+...
+
+## how to install:
+The wrapper will be currently installed from test.pypi.org
+You should install it with adminstrator role because if you do not PATH may not be set correct.
 
 CMD: `pip install --extra-index-url https://test.pypi.org/simple/ tbcs-rf-wrapper`
 
-## Importieren von Robot Tests:
-Um Robot-Tests in eine TestBench CS Instanz zu importieren, muss dem Parser eine JSON-Konfigurationsdatei mit folgenden Feldern übergeben werden:
+## Importings Robot tests into TestBench CS:
+To import Robots Tests into an instance of TestBench CS you need to hand a JSON config file over to the parser.
+The config file needs to have the following fields:
 ```
 {
-  "server_address": <my.testbench.instance: String>,                        # z.B. "trynow01-eu.testbench.com"
-  "tenant_name": <my.tenant: String>,                                       # z.B. "demouser_xy"
-  "product_id": <my.product.id: Int>,                                       # z.B. 3
-  "tenant_user": <my.user: String>,                                         # z.B. "demouser_xy"
-  "password": <my.password: String>,                                        # z.B. "123456"
-  "use_system_proxy": <use.proxy: Boolean>,                                 # z.B. true ## muss genau dann false sein, wenn im System ein Proxy gesetzt ist, der ignoriert werden soll
-  "truststore_path": <my.truststore: String>                                # z.B. "/usr/lib/python3/dist-packages/certifi/cacert.pem" ## wird auf Windows ignoriert, Feld muss aber trotzdem vorhanden sein
+  "server_address": <my.testbench.instance: String>,                        # e.g. "trynow01-eu.testbench.com"
+  "tenant_name": <my.tenant: String>,                                       # e.g. "demouser_xy"
+  "product_id": <my.product.id: Int>,                                       # e.g. 3
+  "tenant_user": <my.user: String>,                                         # e.g. "demouser_xy"
+  "password": <my.password: String>,                                        # e.g. "123456"
+  "use_system_proxy": <use.proxy: Boolean>,                                 # e.g. true ## must be false if a proxy is set in your system which must be ignored
+  "truststore_path": <my.truststore: String>                                # e.g. "/usr/lib/python3/dist-packages/certifi/cacert.pem" ## is igrnoed whe nused with windows 10, the value must be available
 }
 ```
-Außerdem muss dem Parser das Verzeichnis, in dem sich die zu importierenden Robot-Tests befinden übergeben werden. Der Parser importiert alle Tests, inklusive Testschritte, aus allen .robot-Files in dem gegeben Verzeichnis und allen Unterverzeichnissen.
+You need to hand the directory where the testcases are, that should be imported, over to the parser. The parser exports all tests including test steps from all .robot files in the given directory and all subdirectories.
 
-Nach korrekter Installation können Tests mit folgendem systemweitem Befehl importiert werden:
+When installed correct tests could be imported into TestBench CS with the following command:
 
-CMD: `robot-parser <pfad.zu.json.config> <pfad.zu.verzeichnis.mit.robot.tests>`
+CMD: `robot-parser <path.to.json.config> <path.to.dir.containing.robot.tests>`
 
-## Reporten von Testergebnissen:
-Um die Testergebnisse eines oder mehrere Robot Tests in die TestBench CS importieren zu können wird ein Listener zur Verfügung gestellt. Wie auch bei anderen Listenern muss die Listener-Klasse beim Starten der Tests als Parameter übergeben werden. Zudem muss dem Listener als Konstruktorparameter der Pfad zu einer JSON-Konfigurationsdatei (wie oben) übergeben werden:
+## Reporting test results:
+To import test results from one or multiple robot tests into TestBench CS a specific listener is applied. As with other listeners the listener class must be handed over a a parameter when the tests are started. Further on the path to the (or one) JSON config file must also be handed over to the listener like this:
 
-CMD: `robot --listener <pfad.zu.listener.klasse>:"<pfad.zu.json.config>" <pfad.zu.verzeichnis.mit.robot.tests>`
+CMD: `robot --listener <path.to.listener.class>:"<path.to.json.config>" <path.to.dir.containing.robot.tests>`
 
-Wenn das Modul global installiert wurde, könnte der Befehl auf einer Linux Umgebung folgendermaßen aussehen:
+If the module was installed globally the command could look like this using linux:
 
-CMD: `robot --listener /usr/local/lib/python3.6/dist-packages/robot_listener/RobotListener.py:"tbcs.config.json" meineTests/`
+CMD: `robot --listener /usr/local/lib/python3.6/dist-packages/robot_listener/RobotListener.py:"tbcs.config.json" myTests/`
 
-**Hinweis:** Auf Windowssystemen sollten die Pfade für den Listener ebenfalls mit '/', und nicht mit '\\' angegeben werden.
+**REMARK:** When using windows systems the path to the listener should always use '/', and NOT '\\'.
 
-CMD: `robot --listener C:/temp/RobotListener.py:"C:/temp/tbcs.config.json" C:\temp\meineTests\`
+CMD: `robot --listener C:/temp/RobotListener.py:"C:/temp/tbcs.config.json" C:\temp\myTests\`
 
 
-Bei Bedarf kann das Installationsverzeichnis über die Python-Shell gefunden werden (Beispiel Ubuntu):
+When needed the install path for the listener can be found using python shell (for example with Ubuntu):
 ```
 user@host:/# python3
 Python 3.6.8 (default, Jan 14 2019, 11:02:34) 
