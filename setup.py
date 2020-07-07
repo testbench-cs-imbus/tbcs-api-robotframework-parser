@@ -9,7 +9,7 @@ setup(
     install_requires=[
         'requests>=2.22',
         'tbcs-api-client>=0.15',
-        'robotframework==3.1.2'
+        'robotframework==3.2.1'
     ],
 
     entry_points={

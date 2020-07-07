@@ -1,9 +1,12 @@
 import os
 import hashlib
 from typing import List
-from robot.parsing.model import TestCaseFile
 from tbcs_client import ItemNotFoundError
 from tbcs_client import APIConnector
+
+import ast
+import astpretty
+from robot.api import get_model
 
 
 class RobotParser:
@@ -30,17 +33,10 @@ class RobotParser:
         if not file_name.lower().endswith('.robot'):
             return
 
-        test_cases = TestCaseFile(parent=None, source=file_path).populate()
-        for test_case in test_cases.testcase_table.tests:
-            external_id: str = hashlib.sha256((test_case.name + file_name).encode('utf-8')).hexdigest()
-            steps: List[str] = []
-            for step in test_case.steps:
-                steps.append(f'{step.name}')
-            try:
-                test: dict = self.__tbcs_api_connector.get_test_case_by_external_id(external_id)
-                self.update_test_steps(str(test['id']), steps, test['testSequence']['testStepBlocks'][2]['steps'])
-            except ItemNotFoundError:
-                self.__tbcs_api_connector.create_test_case(test_case.name, APIConnector.test_case_type_structured, external_id, steps)
+        test_cases = get_model(file_name)
+        print('AST-Dump:'+ast.dump(test_cases))
+        print('pprint:')
+        astpretty.pprint(test_cases)
 
     """ Method to update test steps for an existing test case if necessary """
     def update_test_steps(self, test_case_id: str, steps_new: List[str], steps_old: List[dict]):
