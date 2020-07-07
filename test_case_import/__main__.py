@@ -23,6 +23,10 @@ import sys
 from tbcs_client import APIConnector
 from test_case_import import RobotParser
 
+import ast
+import astpretty
+from robot.api import get_model
+
 
 def main() -> int:
     if len(sys.argv) < 3:
@@ -36,6 +40,5 @@ def main() -> int:
         print("Parsing completed")
         return 0
     
-
 if __name__ == '__main__':
     sys.exit(main())

@@ -8,12 +8,32 @@ import ast
 import astpretty
 from robot.api import get_model
 
+class TestNamePrinter(ast.NodeVisitor):
+
+    def visit_File(self, node):
+        print(f"File '{node.source}' has following tests:")
+        # Must call `generic_visit` to visit also child nodes.
+        self.generic_visit(node)
+
+    def visit_TestCaseName(self, node):
+        print(f"- {node.name} (on line {node.lineno})")
+        #self.generic_visit(node)
+
+    def visit_KeywordCall(self, node):
+        # print(f"{node.type}")
+        token = node.get_token('KEYWORD')
+        print(token)
+    
+    def visit_Token(self, node):
+        print("{node.type}"+"{node.value}")
+
 
 class RobotParser:
     __tbcs_api_connector: APIConnector
 
     def __init__(self, tbcs_api_connector: APIConnector):
         self.__tbcs_api_connector = tbcs_api_connector
+        self.printer = TestNamePrinter()
 
     """ Method to import tests from robot files into TestBench CS  
     
@@ -28,15 +48,27 @@ class RobotParser:
 
     def import_tests_from_file(self, file_path: str):
         file_path = os.path.normpath(file_path)
+
+        #path_elements wird erstmal nicht genutzt → mal schauen, ob es Win/Linux-Probleme gibt; dann \\↔/ tauschen
         path_elements: List[str] = file_path.split('\\') if os.name == 'nt' else file_path.split('/')
         file_name: str = path_elements[len(path_elements) - 1]
+
         if not file_name.lower().endswith('.robot'):
             return
 
-        test_cases = get_model(file_name)
-        print('AST-Dump:'+ast.dump(test_cases))
-        print('pprint:')
-        astpretty.pprint(test_cases)
+        test_case = get_model(file_path)
+        #astpretty.pprint(test_case)
+        
+        self.printer.visit(test_case)
+
+
+
+
+
+
+
+
+
 
     """ Method to update test steps for an existing test case if necessary """
     def update_test_steps(self, test_case_id: str, steps_new: List[str], steps_old: List[dict]):
