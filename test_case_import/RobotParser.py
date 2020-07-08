@@ -14,7 +14,7 @@ class Visitor(ast.NodeVisitor):
     #testSteps: List[str] = []
     #testCaseName: str
     #external_id = 5
-
+    SEPERATOR: str = ' && '
 
     def __init__(self, tbcs_api_connector: APIConnector):
         self.__tbcs_api_connector = tbcs_api_connector
@@ -58,8 +58,20 @@ class Visitor(ast.NodeVisitor):
         # print(f"{node.type}")
         # teststeps . add (node.bla)
         token = node.get_token('KEYWORD')
-        self.testSteps.append(token.value)
+        
         #print(self.testSteps)
+
+        #hier kommt die Auslese der Argumente rein!
+        tokens = node.get_tokens('ARGUMENT')
+        argument_string = ''
+        for tok in tokens:
+            argument_string += self.SEPERATOR + tok.value
+        print(argument_string)
+        print('='*10)
+        print(self.SEPERATOR)
+
+        self.testSteps.append(token.value + argument_string)
+        
     
     #def visit_Token(self, node):
         #print("{node.type}"+"{node.value}")
@@ -124,6 +136,6 @@ class RobotParser:
             return
 
         test_case = get_model(file_path)
-        #astpretty.pprint(test_case)
+        astpretty.pprint(test_case)
         
         self.__visitor.visit(test_case)
