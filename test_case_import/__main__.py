@@ -23,16 +23,12 @@ import sys
 from tbcs_client import APIConnector
 from test_case_import import RobotParser
 
-import ast
-import astpretty
-from robot.api import get_model
-
 
 def main() -> int:
     if len(sys.argv) < 3:
         return 1
     else:
-        print("Initialising parser...Like a pro")
+        print("Initialising parser...")
         connector: APIConnector = APIConnector(sys.argv[1])
         parser: RobotParser = RobotParser(connector)
         print("Parsing robot files...")

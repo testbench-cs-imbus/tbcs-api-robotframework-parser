@@ -1,81 +1,51 @@
 import os
 import hashlib
 from typing import List
+from ast import NodeVisitor
+from robot.api import get_model
 from tbcs_client import ItemNotFoundError
 from tbcs_client import APIConnector
 
-import ast
-import astpretty
-from robot.api import get_model
 
-class Visitor(ast.NodeVisitor):
+class Visitor(NodeVisitor):
 
-    #__tbcs_api_connector: APIConnector
-    #testSteps: List[str] = []
-    #testCaseName: str
-    #external_id = 5
-    SEPERATOR: str = ' && '
+    SEPERATOR: str = ' $ '
 
     def __init__(self, tbcs_api_connector: APIConnector):
         self.__tbcs_api_connector = tbcs_api_connector
-        self.testSteps: List[str] = []
-        self.fileSource: str = ''
-        self.testCaseName: str = ''
+        self.test_steps: List[str] = []
+        self.file_source: str = ''
+        self.testcase_name: str = ''
         self.external_id: str = ''
 
-
     def visit_File(self, node):
-        #print(f"File '{node.source}' has following tests:")
-        # Must call `generic_visit` to visit also child nodes.
-        self.fileSource = f'{node.source}'
+        self.file_source = f'{node.source}'
         self.generic_visit(node)
 
     def visit_TestCase(self, node):
-        self.testSteps = []
-        self.testCaseName = ''
-        #print(self.testSteps, self.testCaseName)
+        self.test_steps = []
+        self.testcase_name = ''
         self.generic_visit(node)
-        #print(self.testCaseName, type(self.testCaseName),self.testSteps)
-        #print(self.fileSource)
-        #self.external_id = hashlib.sha256((self.testCaseName+self.fileSource).encode('utf-8')).hexdigest() ##quick-fix ID, eher schlechte Idee, da der Listener damit arbeitet
-        path_elements: List[str] = self.fileSource.split('\\') if os.name == 'nt' else self.fileSource.split('/')
+        path_elements: List[str] = self.file_source.split('\\') if os.name == 'nt' else self.file_source.split('/')
         file_name: str = path_elements[len(path_elements) - 1]
-        #print(file_name)
-        self.external_id = hashlib.sha256((self.testCaseName+file_name).encode('utf-8')).hexdigest()
+        self.external_id = hashlib.sha256((self.testcase_name+file_name).encode('utf-8')).hexdigest() #as seen in RobotListener
         try:
             test: dict = self.__tbcs_api_connector.get_test_case_by_external_id(self.external_id)
-            self.update_test_steps(str(test['id']), self.testSteps, test['testSequence']['testStepBlocks'][2]['steps'])
+            self.update_test_steps(str(test['id']), self.test_steps, test['testSequence']['testStepBlocks'][2]['steps'])
         except ItemNotFoundError:
-            self.__tbcs_api_connector.create_test_case(self.testCaseName, APIConnector.test_case_type_structured, self.external_id, self.testSteps)
+            self.__tbcs_api_connector.create_test_case(self.testcase_name, APIConnector.test_case_type_structured, self.external_id, self.test_steps)
 
     def visit_TestCaseName(self, node):
-        self.testCaseName = node.name
-        #print(self.testCaseName)
-        #print(testCaseName)
-        #self.generic_visit(node)
+        self.testcase_name = node.name
 
     def visit_KeywordCall(self, node):
-        # print(f"{node.type}")
-        # teststeps . add (node.bla)
-        token = node.get_token('KEYWORD')
-        
-        #print(self.testSteps)
-
-        #hier kommt die Auslese der Argumente rein!
-        tokens = node.get_tokens('ARGUMENT')
+        keyword_token = node.get_token('KEYWORD')
+        argument_tokens = node.get_tokens('ARGUMENT')
         argument_string = ''
-        for tok in tokens:
-            argument_string += self.SEPERATOR + tok.value
-        print(argument_string)
-        print('='*10)
-        print(self.SEPERATOR)
-
-        self.testSteps.append(token.value + argument_string)
+        for token in argument_tokens:
+            argument_string += self.SEPERATOR + token.value
+        self.test_steps.append(keyword_token.value + argument_string)
         
-    
-    #def visit_Token(self, node):
-        #print("{node.type}"+"{node.value}")
-
     """ Method to update test steps for an existing test case if necessary """
     def update_test_steps(self, test_case_id: str, steps_new: List[str], steps_old: List[dict]):
         # TODO: Performance could be increased by implementing a smarter algorithm
@@ -105,7 +75,6 @@ class Visitor(ast.NodeVisitor):
                 if index >= change_index:
                     self.__tbcs_api_connector.add_test_step(test_case_id, new_step)
 
-
 class RobotParser:
     __tbcs_api_connector: APIConnector
     __visitor: Visitor
@@ -127,15 +96,9 @@ class RobotParser:
 
     def import_tests_from_file(self, file_path: str):
         file_path = os.path.normpath(file_path)
-
-        #path_elements wird erstmal nicht genutzt → mal schauen, ob es Win/Linux-Probleme gibt; dann \\↔/ tauschen
         path_elements: List[str] = file_path.split('\\') if os.name == 'nt' else file_path.split('/')
         file_name: str = path_elements[len(path_elements) - 1]
-
         if not file_name.lower().endswith('.robot'):
             return
-
         test_case = get_model(file_path)
-        astpretty.pprint(test_case)
-        
         self.__visitor.visit(test_case)

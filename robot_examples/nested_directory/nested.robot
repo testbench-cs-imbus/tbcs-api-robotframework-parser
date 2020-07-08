@@ -4,7 +4,7 @@ Test title
     When action
     Then check expectations
 
-Another test in the wall 3
+Another test in the wall
     just
     do
     something
