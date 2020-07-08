@@ -7,3 +7,6 @@
 /tbcs.config.json
 /tbcs_rf_wrapper.egg-info/
 /config.json
+log.html
+output.xml
+report.html

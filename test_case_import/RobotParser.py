@@ -24,12 +24,6 @@ class Visitor(ast.NodeVisitor):
         self.external_id: str = ''
 
 
-    # visit tescase
-    #   test steps = nil
-    #   test case name = null;
-    #   visit kinder
-    # schicke weg
-
     def visit_File(self, node):
         #print(f"File '{node.source}' has following tests:")
         # Must call `generic_visit` to visit also child nodes.
@@ -133,41 +127,3 @@ class RobotParser:
         #astpretty.pprint(test_case)
         
         self.__visitor.visit(test_case)
-
-
-
-
-
-
-
-
-
-
-    """ Method to update test steps for an existing test case if necessary """
-    def update_test_steps(self, test_case_id: str, steps_new: List[str], steps_old: List[dict]):
-        # TODO: Performance could be increased by implementing a smarter algorithm
-        if len(steps_new) < len(steps_old):
-            for index, old_step in enumerate(steps_old):
-                if index >= len(steps_new):
-                    self.__tbcs_api_connector.remove_test_step(test_case_id, str(old_step['id']))
-
-        change_index: int = -1
-        for index, old_step in enumerate(steps_old):
-            if index >= len(steps_new):
-                break
-            if not old_step['description'] == steps_new[index]:
-                change_index = index
-                break
-
-        if change_index == -1:
-            if len(steps_new) > len(steps_old):
-                for index, old_step in enumerate(steps_old, len(steps_old)):
-                    self.__tbcs_api_connector.add_test_step(test_case_id, steps_new[index])
-            return
-        else:
-            for index, old_step in enumerate(steps_old):
-                if index >= change_index:
-                    self.__tbcs_api_connector.remove_test_step(test_case_id, str(old_step['id']))
-            for index, new_step in enumerate(steps_new):
-                if index >= change_index:
-                    self.__tbcs_api_connector.add_test_step(test_case_id, new_step)
