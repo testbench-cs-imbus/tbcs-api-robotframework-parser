@@ -4,8 +4,6 @@ from typing import List
 from tbcs_client import APIConnector
 from test_case_import import RobotParser
 
-import pprint
-
 
 class RobotListener:
     ROBOT_LIBRARY_SCOPE = 'TEST SUITE'
@@ -40,25 +38,11 @@ class RobotListener:
         execution_id: str = self.__connector.start_execution(self.__current_test_case_id)
         self.__current_execution = self.__connector.get_execution_by_id(self.__current_test_case_id, execution_id)
         self.__current_execution_counter = 0
-        #parsed = json.loads(self.__current_execution)
-        #print(json.dumps(parsed, indent=4, sort_keys=True))
-        #pp=pprint.PrettyPrinter(indent=4)
-        #pp.pprint(self.__current_execution)
 
-    #Problem ist: Einzelnes Keyword in RF ist fertig, aber gesamte Liste von Results der CS wird bearbeitet
     def end_keyword(self, name: str, attributes: dict):
-        #pp=pprint.PrettyPrinter(indent=1)
-        #pp.pprint(attributes)
-        #print('Hier kommt TestStep')
-        #pp.pprint(self.__current_execution['testSequence']['testStepBlocks'][2]['steps'][0])
         test_step_status: str = APIConnector.test_step_status_passed if attributes['status'] == 'PASS' else APIConnector.test_step_status_failed
         self.__connector.report_step_result(self.__current_test_case_id, str(self.__current_execution['id']), self.__current_execution['testSequence']['testStepBlocks'][2]['steps'][self.__current_execution_counter]['id'] , test_step_status)
         self.__current_execution_counter += 1
-        #for test_step in self.__current_execution['testSequence']['testStepBlocks'][2]['steps']:
-        #    if attributes['kwname'] == test_step['description']:
-        #        self.__connector.report_step_result(self.__current_test_case_id, str(self.__current_execution['id']), str(test_step['id']), test_step_status)
-                
-        #        return #durch das Return werden die anderen dann auch nicht mehr auf FAIL gesetzt → der Testfall bleibt offen!
 
     def end_test(self, name: str, attributes: dict):
         test_status: str = APIConnector.test_status_passed if attributes['status'] == 'PASS' else APIConnector.test_status_failed

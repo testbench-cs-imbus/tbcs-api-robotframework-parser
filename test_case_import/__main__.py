@@ -32,7 +32,7 @@ def main() -> int:
     if len(sys.argv) < 3:
         return 1
     else:
-        print("Initialising parser...Like a pro")
+        print("Initialising parser...")
         connector: APIConnector = APIConnector(sys.argv[1])
         parser: RobotParser = RobotParser(connector)
         print("Parsing robot files...")
