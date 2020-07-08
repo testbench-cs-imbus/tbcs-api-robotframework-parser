@@ -1,13 +1,14 @@
 #as seen in https://robot-framework.readthedocs.io/en/v3.2.1/autodoc/robot.parsing.html#module-robot.parsing
 
 *** Test Cases ***
-Example
-    Keyword    argument
+11ExampleTestCase
+    OwnKeyword 1    argument
+    Own Keyword 2
 
 Second example
-    Keyword    xxx
+    OwnKeyword    xxx
 
 *** Keywords ***
-Keyword
+OwnKeyword
     [Arguments]    ${arg}
     Log    ${arg}
