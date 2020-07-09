@@ -3,7 +3,7 @@
 Python (with pip) version 3 installed and running.
 Robot Framework Version 3.2.1 installed and running.
 ...
-REMARK: This Wrapper will NOT work with older versions of Robot Framework (and its older API)
+REMARK: This Wrapper will NOT work with older versions of Robot Framework (especially its older API)
 ...
 
 ## How to install:
@@ -30,20 +30,16 @@ You need to hand the directory where the testcases are, that should be imported,
 
 When installed correct tests could be imported into TestBench CS with the following command:
 
-CMD: `robot-parser <path.to.json.config> <path.to.dir.containing.robot.tests>`
+CMD: `robot-parser <path.to.config.json> <path.to.dir.containing.robot.tests>`
 
 ## Reporting test results:
-To import test results from one or multiple robot tests into TestBench CS a specific listener is applied. As with other listeners the listener class must be handed over a a parameter when the tests are started. Further on the path to the (or one) JSON config file must also be handed over to the listener like this:
+To import test results from one or multiple robot tests into TestBench CS a specific listener is applied. As with other listeners the listener class must be handed over a a parameter when the tests are started. Further on you have to navigate to the path where the config.json is in to hand the file over to the listener. Execute Robot Framework like this:
 
-CMD: `robot --listener <path.to.listener.class>:"<path.to.json.config>" <path.to.dir.containing.robot.tests>`
+CMD: `robot --listener <path.to.listener.class>:<name.of.the.config.json> <path.to.dir.containing.robot.tests>`
 
 If the module was installed globally the command could look like this using linux:
 
-CMD: `robot --listener /usr/local/lib/python3.6/dist-packages/robot_listener/RobotListener.py:"tbcs.config.json" myTests/`
-
-**REMARK:** When using windows systems the path to the listener should always use '/', and NOT '\\'.
-
-CMD: `robot --listener C:/temp/RobotListener.py:"C:/temp/tbcs.config.json" C:\temp\myTests\`
+CMD: `robot --listener /usr/local/lib/python3.6/dist-packages/robot_listener/RobotListener.py:config.json myTests/`
 
 
 When needed the install path for the listener can be found using python shell (for example with Ubuntu):
