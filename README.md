@@ -1,12 +1,12 @@
 # Robot Framework Integration for TestBench CS
-## preconditions:
-Python version 3 installed and running.
-Robot Framework Version 2 installed and running.
+## Preconditions:
+Python (with pip) version 3 installed and running.
+Robot Framework Version 3.2.1 installed and running.
 ...
-REMARK: This Wrapper will NOT work with version 3 of Robot Framework
+REMARK: This Wrapper will NOT work with older versions of Robot Framework (and its older API)
 ...
 
-## how to install:
+## How to install:
 The wrapper will be currently installed from test.pypi.org
 You should install it with adminstrator role because if you do not PATH may not be set correct.
 

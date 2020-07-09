@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='tbcs_rf_wrapper',
-    version='0.15',
+    version='0.16',
     packages=find_packages(exclude=['tests']),
 
     python_requires='>=3.6',
