@@ -14,6 +14,7 @@ class RobotListener:
     __current_test_case_id: str = ''
     __current_execution: dict = ''
     __current_execution_counter: int = 0
+    __current_execution_id: str = ''
     __connector: APIConnector
     __parser: RobotParser
 
@@ -35,8 +36,8 @@ class RobotListener:
     def start_test(self, name: str, attributes: dict):
         external_id: str = hashlib.sha256((name + self.__current_file).encode('utf-8')).hexdigest()
         self.__current_test_case_id = str(self.__connector.get_test_case_by_external_id(external_id)['id'])
-        execution_id: str = self.__connector.start_execution(self.__current_test_case_id)
-        self.__current_execution = self.__connector.get_execution_by_id(self.__current_test_case_id, execution_id)
+        self.__current_execution_id: str = self.__connector.start_execution(self.__current_test_case_id)
+        self.__current_execution = self.__connector.get_execution_by_id(self.__current_test_case_id, self.__current_execution_id)
         self.__current_execution_counter = 0
 
     def end_keyword(self, name: str, attributes: dict):
@@ -45,5 +46,18 @@ class RobotListener:
         self.__current_execution_counter += 1
 
     def end_test(self, name: str, attributes: dict):
+        self.__connector.update_execution_status(self.__current_test_case_id, self.__current_execution_id, 'Finished')
         test_status: str = APIConnector.test_status_passed if attributes['status'] == 'PASS' else APIConnector.test_status_failed
+        print('Der Test ist aus, wir gehn nach Haus')
         self.__connector.report_test_case_result(self.__current_test_case_id, str(self.__current_execution['id']), test_status)
+
+    def log_message(self, log: str):
+        #print('Log Message vom Listener:', log.get('message'))
+        message = log.get('message')
+        #print('Plain Message:', message)
+        #print(self.__current_execution)
+        #print("=="*25)
+        #print("TestCaseID:", self.__current_execution['testCase']['id'], ", ExecutionID:", self.__current_execution_id, ", TestStepID:", self.__current_execution['testSequence']['testStepBlocks'][2]['steps'][self.__current_execution_counter]['id'])
+        defect_id = self.__connector.create_defect("TestCaseName", "TestStepName", message)['defectId']
+        self.__connector.assign_defect(self.__current_execution['testCase']['id'], self.__current_execution_id, self.__current_execution['testSequence']['testStepBlocks'][2]['steps'][self.__current_execution_counter]['id'], defect_id)
+

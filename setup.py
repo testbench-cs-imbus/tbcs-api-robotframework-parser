@@ -8,7 +8,7 @@ setup(
     python_requires='>=3.6',
     install_requires=[
         'requests>=2.22',
-        'tbcs-api-client>=0.15',
+        'tbcs-api-client>=0.17',
         'robotframework==3.2.1'
     ],
 

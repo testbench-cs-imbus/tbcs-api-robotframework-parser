@@ -6,6 +6,7 @@ from robot.api import get_model
 from tbcs_client import ItemNotFoundError
 from tbcs_client import APIConnector
 
+import astpretty
 
 class Visitor(NodeVisitor):
 
@@ -16,6 +17,7 @@ class Visitor(NodeVisitor):
         self.test_steps: List[str] = []
         self.file_source: str = ''
         self.testcase_name: str = ''
+        self.testcase_description: str = ''
         self.external_id: str = ''
 
     def visit_File(self, node):
@@ -33,10 +35,14 @@ class Visitor(NodeVisitor):
             test: dict = self.__tbcs_api_connector.get_test_case_by_external_id(self.external_id)
             self.update_test_steps(str(test['id']), self.test_steps, test['testSequence']['testStepBlocks'][2]['steps'])
         except ItemNotFoundError:
-            self.__tbcs_api_connector.create_test_case(self.testcase_name, APIConnector.test_case_type_structured, self.external_id, self.test_steps)
+            self.__tbcs_api_connector.create_test_case(self.testcase_name, self.testcase_description, APIConnector.test_case_type_structured, self.external_id, self.test_steps)
 
     def visit_TestCaseName(self, node):
         self.testcase_name = node.name
+        self.testcase_description = self.testcase_name
+
+    def visit_Documentation(self, node):
+        self.testcase_description = (node.get_token('ARGUMENT')).value
 
     def visit_KeywordCall(self, node):
         keyword_token = node.get_token('KEYWORD')
@@ -101,4 +107,7 @@ class RobotParser:
         if not file_name.lower().endswith('.robot'):
             return
         test_case = get_model(file_path)
+
+        #astpretty.pprint(test_case)
+
         self.__visitor.visit(test_case)
