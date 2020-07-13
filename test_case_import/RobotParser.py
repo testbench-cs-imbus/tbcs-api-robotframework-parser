@@ -7,6 +7,7 @@ from tbcs_client import ItemNotFoundError
 from tbcs_client import APIConnector
 
 import astpretty
+import pprint
 
 class Visitor(NodeVisitor):
 
@@ -34,12 +35,22 @@ class Visitor(NodeVisitor):
         try:
             test: dict = self.__tbcs_api_connector.get_test_case_by_external_id(self.external_id)
             self.update_test_steps(str(test['id']), self.test_steps, test['testSequence']['testStepBlocks'][2]['steps'])
+            if test['description'] != self.testcase_description:
+                #print('OH WEH OH WEH!!!!!!!!!!!!!!!!!!!!!!!', str(test['id']))
+                #self.__tbcs_api_connector.update_test_case_description('80')
+                self.__tbcs_api_connector.update_test_case_description(str(test['id']), self.testcase_description)
+            #pp = pprint.PrettyPrinter(indent=4)
+            #pp.pprint(test)
+            #print('====='*35)
+            #print(test['description'])
+            #print('====='*35)
+            #
         except ItemNotFoundError:
             self.__tbcs_api_connector.create_test_case(self.testcase_name, self.testcase_description, APIConnector.test_case_type_structured, self.external_id, self.test_steps)
 
     def visit_TestCaseName(self, node):
         self.testcase_name = node.name
-        self.testcase_description = self.testcase_name
+        self.testcase_description = self.testcase_name #as default value if no documentation is given
 
     def visit_Documentation(self, node):
         self.testcase_description = (node.get_token('ARGUMENT')).value

@@ -1,5 +1,6 @@
 *** Test Cases ***
 Test title
+    [Documentation]    With its Documentation.
     Provided precondition
     When action
     Then check expectations

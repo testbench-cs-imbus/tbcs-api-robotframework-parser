@@ -59,5 +59,7 @@ class RobotListener:
         #print("=="*25)
         #print("TestCaseID:", self.__current_execution['testCase']['id'], ", ExecutionID:", self.__current_execution_id, ", TestStepID:", self.__current_execution['testSequence']['testStepBlocks'][2]['steps'][self.__current_execution_counter]['id'])
         defect_id = self.__connector.create_defect("TestCaseName", "TestStepName", message)['defectId']
+        #print('Habe nen Defect erstellt mit der ID:', defect_id)
         self.__connector.assign_defect(self.__current_execution['testCase']['id'], self.__current_execution_id, self.__current_execution['testSequence']['testStepBlocks'][2]['steps'][self.__current_execution_counter]['id'], defect_id)
+        #print('Habe an den ')
 
