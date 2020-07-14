@@ -29,20 +29,28 @@ class Visitor(NodeVisitor):
         self.file_source = f'{node.source}'
         self.generic_visit(node)
 
-    def visit_SuiteSetup(self, node):
-        self.suite_setup.append(node.get_token('NAME').value)
+    def visit_TestSetup(self, node):
+        argument_tokens = node.get_tokens('ARGUMENT')
+        argument_string = ''
+        for token in argument_tokens:
+            argument_string += self.SEPERATOR + token.value
+        self.suite_setup.append(node.get_token('NAME').value + argument_string)
 
-    def visit_SuiteTeardown(self, node):
-        self.suite_teardown.append(node.get_token('NAME').value)
+    def visit_TestTeardown(self, node):
+        argument_tokens = node.get_tokens('ARGUMENT')
+        argument_string = ''
+        for token in argument_tokens:
+            argument_string += self.SEPERATOR + token.value
+        self.suite_teardown.append(node.get_token('NAME').value + argument_string)
 
     def visit_TestCase(self, node):
         self.testcase_name = ''
-        self.test_case_setup = self.suite_setup[:]
+        self.test_case_setup = self.suite_setup[:] #as default value if no own test_case_setup is given
         self.test_case_teardown = self.suite_teardown[:]
         #print(self.test_case_teardown)
         self.test_steps = []
         self.generic_visit(node)
-        print(self.test_steps)
+        #print(self.test_steps)
         #print(self.test_case_teardown)
         path_elements: List[str] = self.file_source.split('\\') if os.name == 'nt' else self.file_source.split('/')
         file_name: str = path_elements[len(path_elements) - 1]
@@ -74,10 +82,20 @@ class Visitor(NodeVisitor):
         self.test_steps.append(keyword_token.value + argument_string)
 
     def visit_Setup(self, node):
-        self.test_case_setup.append(node.get_token('NAME').value)
+        argument_tokens = node.get_tokens('ARGUMENT')
+        argument_string = ''
+        for token in argument_tokens:
+            argument_string += self.SEPERATOR + token.value
+        self.test_case_setup = []
+        self.test_case_setup.append(node.get_token('NAME').value + argument_string)
 
     def visit_Teardown(self, node):
-        self.test_case_teardown.insert(0, node.get_token('NAME').value)
+        argument_tokens = node.get_tokens('ARGUMENT')
+        argument_string = ''
+        for token in argument_tokens:
+            argument_string += self.SEPERATOR + token.value
+        self.test_case_teardown = []
+        self.test_case_teardown.append(node.get_token('NAME').value + argument_string)
         
     """ Method to update test steps for an existing test case if necessary """
     def update_test_steps(self, test_case_id: str, steps_new: List[str], steps_old: List[dict], test_step_block: int):
@@ -135,6 +153,6 @@ class RobotParser:
             return
         test_case = get_model(file_path)
 
-        astpretty.pprint(test_case)
+        #astpretty.pprint(test_case)
 
         self.__visitor.visit(test_case)
