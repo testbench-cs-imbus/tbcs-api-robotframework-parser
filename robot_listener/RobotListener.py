@@ -41,25 +41,20 @@ class RobotListener:
         self.__current_execution_counter = 0
 
     def end_keyword(self, name: str, attributes: dict):
+        print('1')
         test_step_status: str = APIConnector.test_step_status_passed if attributes['status'] == 'PASS' else APIConnector.test_step_status_failed
+        print('2')
         self.__connector.report_step_result(self.__current_test_case_id, str(self.__current_execution['id']), self.__current_execution['testSequence']['testStepBlocks'][2]['steps'][self.__current_execution_counter]['id'] , test_step_status)
+        print('3')
         self.__current_execution_counter += 1
 
     def end_test(self, name: str, attributes: dict):
         self.__connector.update_execution_status(self.__current_test_case_id, self.__current_execution_id, 'Finished')
         test_status: str = APIConnector.test_status_passed if attributes['status'] == 'PASS' else APIConnector.test_status_failed
-        print('Der Test ist aus, wir gehn nach Haus')
         self.__connector.report_test_case_result(self.__current_test_case_id, str(self.__current_execution['id']), test_status)
 
     def log_message(self, log: str):
-        #print('Log Message vom Listener:', log.get('message'))
         message = log.get('message')
-        #print('Plain Message:', message)
-        #print(self.__current_execution)
-        #print("=="*25)
-        #print("TestCaseID:", self.__current_execution['testCase']['id'], ", ExecutionID:", self.__current_execution_id, ", TestStepID:", self.__current_execution['testSequence']['testStepBlocks'][2]['steps'][self.__current_execution_counter]['id'])
         defect_id = self.__connector.create_defect("TestCaseName", "TestStepName", message)['defectId']
-        #print('Habe nen Defect erstellt mit der ID:', defect_id)
         self.__connector.assign_defect(self.__current_execution['testCase']['id'], self.__current_execution_id, self.__current_execution['testSequence']['testStepBlocks'][2]['steps'][self.__current_execution_counter]['id'], defect_id)
-        #print('Habe an den ')
 
