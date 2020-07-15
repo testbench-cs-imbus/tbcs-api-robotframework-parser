@@ -54,7 +54,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 '/usr/local/lib/python3.6/dist-packages/robot_listener/RobotListener.py'
 ```
 
-## Known bugs:
+## Known issues:
 ### Line Continuation
 New lines continued by '...' are set as new test steps
 

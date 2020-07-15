@@ -45,7 +45,6 @@ class RobotListener:
         self.__current_execution_counter = [0,0,0,0,0] #equaling test_blocks in structured template
 
     def end_keyword(self, name: str, attributes: dict):
-        #print('Hier läuft end keyword',self.__current_execution_counter)
         test_step_status: str = APIConnector.test_step_status_passed if attributes['status'] == 'PASS' else APIConnector.test_step_status_failed
         self.__test_block_index = self.__test_blocks.index(attributes['type'])
         self.__connector.report_step_result(self.__current_test_case_id, str(self.__current_execution['id']), self.__current_execution['testSequence']['testStepBlocks'][self.__test_block_index]['steps'][self.__current_execution_counter[self.__test_block_index]]['id'] , test_step_status)
@@ -61,9 +60,4 @@ class RobotListener:
         self.__connector.report_test_case_result(self.__current_test_case_id, str(self.__current_execution['id']), test_status)
 
     def log_message(self, log: str):
-        #print('Hier läuft log message',self.__current_execution_counter)
         self.__log_message = log.get('message')
-        #print(self.__log_message)
-        #print(self.__current_execution_counter)
-        #defect_id = self.__connector.create_defect(self.__current_execution['testCase']['name'], self.__current_execution['testSequence']['testStepBlocks'][self.__test_block_index]['steps'][self.__current_execution_counter[self.__test_block_index]]['description'], message)['defectId']
-        #self.__connector.assign_defect(self.__current_execution['testCase']['id'], self.__current_execution_id, self.__current_execution['testSequence']['testStepBlocks'][self.__test_block_index]['steps'][self.__current_execution_counter[self.__test_block_index]]['id'], defect_id)
