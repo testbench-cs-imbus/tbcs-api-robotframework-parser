@@ -59,8 +59,8 @@
         },
         "tbcs-api-client": {
             "hashes": [
-                "...",
-                "..."
+                "sha256:de48b91a259c9a86713afddb5903e261240d98881b14b923eef4184279564c12",
+                "sha256:c83b0f1f0b29c0b347a59d9d6814484f2e339e5f9d250e07ab2fee8e06bea5fb"
             ],
             "index": "pypi",
             "version": "==0.18"
