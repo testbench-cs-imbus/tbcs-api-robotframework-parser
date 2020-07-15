@@ -6,12 +6,12 @@ from robot.api import get_model
 from tbcs_client import ItemNotFoundError
 from tbcs_client import APIConnector
 
-import astpretty
-import pprint
 
+""" Visitor class to visit nodes in the AST the RF model is providing and executing corresponding actions """
 class Visitor(NodeVisitor):
 
     SEPERATOR: str = ' $ '
+
 
     def __init__(self, tbcs_api_connector: APIConnector):
         self.__tbcs_api_connector = tbcs_api_connector
@@ -47,11 +47,8 @@ class Visitor(NodeVisitor):
         self.testcase_name = ''
         self.test_case_setup = self.suite_setup[:] #as default value if no own test_case_setup is given
         self.test_case_teardown = self.suite_teardown[:]
-        #print(self.test_case_teardown)
         self.test_steps = []
         self.generic_visit(node)
-        #print(self.test_steps)
-        #print(self.test_case_teardown)
         path_elements: List[str] = self.file_source.split('\\') if os.name == 'nt' else self.file_source.split('/')
         file_name: str = path_elements[len(path_elements) - 1]
         self.external_id = hashlib.sha256((self.testcase_name+file_name).encode('utf-8')).hexdigest() #as seen in RobotListener
@@ -74,7 +71,6 @@ class Visitor(NodeVisitor):
 
     def visit_KeywordCall(self, node):
         keyword_token = node.get_token('KEYWORD')
-        #print(keyword_token.value)
         argument_tokens = node.get_tokens('ARGUMENT')
         argument_string = ''
         for token in argument_tokens:
@@ -112,11 +108,10 @@ class Visitor(NodeVisitor):
             if not old_step['description'] == steps_new[index]:
                 change_index = index
                 break
-
         if change_index == -1:
             if len(steps_new) > len(steps_old):
-                for index, old_step in enumerate(steps_old, len(steps_old)):
-                    self.__tbcs_api_connector.add_test_step(test_case_id, steps_new[index], test_step_block)
+                for i in steps_new[len(steps_old):]:
+                    self.__tbcs_api_connector.add_test_step(test_case_id, i, test_step_block)
             return
         else:
             for index, old_step in enumerate(steps_old):
@@ -134,7 +129,8 @@ class RobotParser:
         self.__tbcs_api_connector = tbcs_api_connector
         self.__visitor = Visitor(tbcs_api_connector)
 
-    """ Method to import tests from robot files into TestBench CS  
+    """
+    Method to import tests from robot files into TestBench CS  
     
     All robot tests from a given directory and all subdirectories are imported into the TestBench CS instance
     provided in your tbcs.config.json. 
@@ -152,7 +148,4 @@ class RobotParser:
         if not file_name.lower().endswith('.robot'):
             return
         test_case = get_model(file_path)
-
-        #astpretty.pprint(test_case)
-
         self.__visitor.visit(test_case)

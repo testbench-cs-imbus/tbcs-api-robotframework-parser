@@ -53,3 +53,10 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>> os.path.abspath(sys.modules[RobotListener.__module__].__file__)
 '/usr/local/lib/python3.6/dist-packages/robot_listener/RobotListener.py'
 ```
+
+## Known bugs:
+### Line Continuation
+New lines continued by '...' are set as new test steps
+
+### Suite Setup & Teardown
+Those setups/teardowns are running independent from testcases, so there is no obvious way to import it to TB CS (maybe preconditions for setup but what about teardown?).
