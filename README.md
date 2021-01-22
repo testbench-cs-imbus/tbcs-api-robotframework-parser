@@ -7,8 +7,8 @@ REMARK: This Wrapper will NOT work with older versions of Robot Framework (espec
 ...
 
 ## How to install:
-The wrapper will be currently installed from test.pypi.org
-You should install it with adminstrator role because if you do not PATH may not be set correct.
+The wrapper will currently be installed from test.pypi.org
+You should install it with adminstrator role because if you do not, PATH may not be set correct.
 
 CMD: `pip install --extra-index-url https://test.pypi.org/simple/ tbcs-rf-wrapper`
 
