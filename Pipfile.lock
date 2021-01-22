@@ -51,19 +51,19 @@
         },
         "robotframework": {
             "hashes": [
-                "sha256:cc4b04f711677c94c7d1e30ef1e5cdd50c0b731f8038d6214379c3def183c7f0",
-                "sha256:f10dd7c0c8c7962a4f80dd1e026b5db731b9391bc6e1f9ebb96d685eb1230dbc"
+                "sha256:34923415afd9491141630ad1d7146b638ee869f1c7f97c450c0da5ce79e1ac23",
+                "sha256:d693e6d06b17f48669e2a8c4cb6c1f0d56e5f1a74835d18b8ea2118da7bf2d79"
             ],
             "index": "pypi",
-            "version": "==3.1.2"
+            "version": "==3.2.1"
         },
         "tbcs-api-client": {
             "hashes": [
-                "sha256:05c33858db2e2042bb4005c37174b3f8970aa1d7e403f4c528c42d40c8a98e24",
-                "sha256:f8df8931ab480231173c59f380d688e5cd988b70df67b43053848fd6d9473f0a"
+                "sha256:de48b91a259c9a86713afddb5903e261240d98881b14b923eef4184279564c12",
+                "sha256:c83b0f1f0b29c0b347a59d9d6814484f2e339e5f9d250e07ab2fee8e06bea5fb"
             ],
             "index": "pypi",
-            "version": "==0.15"
+            "version": "==0.18"
         },
         "urllib3": {
             "hashes": [

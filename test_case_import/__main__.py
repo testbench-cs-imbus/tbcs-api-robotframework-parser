@@ -35,7 +35,6 @@ def main() -> int:
         parser.import_tests_from_directory(sys.argv[2])
         print("Parsing completed")
         return 0
-
-
+    
 if __name__ == '__main__':
     sys.exit(main())

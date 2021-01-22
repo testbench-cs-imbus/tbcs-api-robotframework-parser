@@ -6,3 +6,13 @@
 /*/__pycache__/
 /tbcs.config.json
 /tbcs_rf_wrapper.egg-info/
+/config.json
+log.html
+output.xml
+report.html
+robot_examples/SetUndTear.robot
+robot_examples/Documentation/doc.robot
+robot_examples/funktTest/funktTest.robot
+robot_examples/SetundTear/SetUndTear.robot
+robot_examples/Documentation/doc.robot
+robot_examples/funktTest/funktTest.robot
