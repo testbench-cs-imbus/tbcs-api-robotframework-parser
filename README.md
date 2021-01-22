@@ -59,4 +59,4 @@ Type "help", "copyright", "credits" or "license" for more information.
 New lines continued by '...' are set as new test steps
 
 ### Suite Setup & Teardown
-Those setups/teardowns are running independent from testcases, so there is no obvious way to import it to TB CS (maybe preconditions for setup but what about teardown?).
+Currently, setup and teardown will not be processed by this wrapper.
