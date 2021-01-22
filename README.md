@@ -2,15 +2,28 @@
 ## Preconditions:
 Python (with pip) version 3 installed and running.
 Robot Framework Version 3.2.1 installed and running.
-...
-REMARK: This Wrapper will NOT work with older versions of Robot Framework (especially its older API)
-...
+
+
+Note: This Wrapper will NOT work with older versions of Robot Framework (especially its older API)
+
 
 ## How to install:
 The wrapper will currently be installed from test.pypi.org
 You should install it with adminstrator role because if you do not, PATH may not be set correct.
 
 CMD: `pip install --extra-index-url https://test.pypi.org/simple/ tbcs-rf-wrapper`
+
+
+Note: On some versions of Ubuntu there exists a bug that prevents pip from using the extra-index-url.
+If you get the error message `Client Error: Not Found for url: https://pypi.org/simple/tbcs-rf-wrapper/`
+you need to install the dependencies manually and use index-url instead:
+
+CMD: `pip install requests`
+
+CMD: `pip install robotframework`
+
+CMD: `pip install --index-url https://test.pypi.org/simple/ tbcs-rf-wrapper`
+
 
 ## Importings Robot tests into TestBench CS:
 To import Robots Tests into an instance of TestBench CS you need to hand a JSON config file over to the parser.
