@@ -22,8 +22,8 @@ The config file needs to have the following fields:
   "product_id": <my.product.id: Int>,                                       # e.g. 3
   "tenant_user": <my.user: String>,                                         # e.g. "demouser_xy"
   "password": <my.password: String>,                                        # e.g. "123456"
-  "use_system_proxy": <use.proxy: Boolean>,                                 # e.g. true ## must be false if a proxy is set in your system which must be ignored
-  "truststore_path": <my.truststore: String>                                # e.g. "/usr/lib/python3/dist-packages/certifi/cacert.pem" ## is igrnoed whe nused with windows 10, the value must be available
+  "use_system_proxy": <use.proxy: Boolean>,                                 # e.g. true ## must be false if there is a proxy set that must be ignored
+  "truststore_path": <my.truststore: String>                                # e.g. "/usr/lib/python3/dist-packages/certifi/cacert.pem" ## value is ignored when used with windows 10, but field has to be available anyway
 }
 ```
 You need to hand the directory where the testcases are, that should be imported, over to the parser. The parser exports all tests including test steps from all .robot files in the given directory and all subdirectories.
