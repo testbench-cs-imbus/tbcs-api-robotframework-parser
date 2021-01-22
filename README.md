@@ -20,7 +20,7 @@ you need to install the dependencies manually and use index-url instead:
 
 CMD: `pip install requests`
 
-CMD: `pip install robotframework`
+CMD: `pip install robotframework==3.2.1`
 
 CMD: `pip install --index-url https://test.pypi.org/simple/ tbcs-rf-wrapper`
 
