@@ -13,7 +13,7 @@ pytest = "*"
 
 [packages]
 tbcs-api-client = "==0.18"
-robotframework = "==3.2.1"
+robotframework = "~=3.2"
 
 [requires]
-python_version = "3.6"
+python_version = "3.8"
