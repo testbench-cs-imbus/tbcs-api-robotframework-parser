@@ -1,10 +1,10 @@
 # Robot Framework Integration for TestBench CS
 ## Preconditions:
 Python (with pip) version 3 installed and running.
-Robot Framework Version 3.2.1 installed and running.
+Robot Framework Version 3.2.x installed and running.
 
 
-Note: This Wrapper will NOT work with older versions of Robot Framework that use the old API.
+Note: This Wrapper will NOT work with older versions of Robot Framework. Also newer versions of Robot Framework than 3.2.2 have not been tested.
 
 
 ## How to install:
@@ -20,7 +20,7 @@ you need to install the dependencies manually and use index-url instead:
 
 CMD: `pip install requests`
 
-CMD: `pip install robotframework==3.2.1`
+CMD: `pip install robotframework`
 
 CMD: `pip install --index-url https://test.pypi.org/simple/ tbcs-rf-wrapper`
 
