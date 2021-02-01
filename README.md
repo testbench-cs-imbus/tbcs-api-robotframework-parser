@@ -4,8 +4,11 @@ Python (with pip) version 3 installed and running.
 Robot Framework Version 3.2.x installed and running.
 
 
-Note: This Wrapper will NOT work with older versions of Robot Framework. Also newer versions of Robot Framework than 3.2.2 have not been tested.
+Note: This wrapper has been tested with Version 3.2.1 and 3.2.2 of Robot Framework.
+It will not run with older versions of Robot Framework.
+It may run with Versions 3.2.x of Robot Framework that will be released in the future but we did not test this.
 
+This wrapper will be tested for running with Version 4.0.* of Robot Framework as soon as we find it used in one of our Projects.
 
 ## How to install:
 The wrapper will currently be installed from test.pypi.org
