@@ -12,8 +12,9 @@ verify_ssl = true
 pytest = "*"
 
 [packages]
-tbcs-api-client = "==0.18"
+tbcs-api-client = "==0.22"
 robotframework = "~=3.2"
+twine = "*"
 
 [requires]
 python_version = "3.8"

@@ -1,125 +1,105 @@
 from typing import List
-import tbcs_client
+from tbcs_client import APIConnector, ItemNotFoundError
+from robot_listener import TestCaseModel, TestStepModel
 
 
-class MockAPIConnector(tbcs_client.APIConnector):
-    call_counter_remove_test_step: int = 0
-    call_counter_add_test_step: int = 0
+# TODO write unit tests for this
+class MockAPIConnector(APIConnector):
     call_counter_create_test_case: int = 0
+    call_counter_add_test_step: int = 0
+    call_counter_remove_test_step: int = 0
     call_counter_get_test_case_by_external_id: int = 0
+    call_counter_get_test_case_by_id: int = 0
     call_counter_start_execution: int = 0
     call_counter_report_step_result: int = 0
-    call_counter_report_test_case_result: int = 0
-    test_cases: List[dict]
+    call_counter_create_defect: int = 0
+    call_counter_assign_defect: int = 0
+    test_cases: List[TestCaseModel]
 
-    def __init__(
+    def __init__(self):
+        APIConnector.__init__(self)
+        self.test_cases = []
+
+    def create_test_case(
             self,
-            init_test_cases: List[dict] = None
-    ):
-        self.test_cases = init_test_cases if init_test_cases is not None else []
-        tbcs_client.APIConnector.__init__(self)
+            test_case_name: str,
+            test_case_description: str,
+            test_case_type: str,
+            external_id: str,
+    ) -> str:
+        self.call_counter_create_test_case += 1
+        new_index: str = str(self.call_counter_create_test_case)
+        self.test_cases.append(TestCaseModel(
+            new_index,
+            test_case_name,
+            test_case_description,
+            test_case_description,
+            external_id
+        ))
+
+        return new_index
 
     def add_test_step(
             self,
             test_case_id: str,
             test_step: str,
-            previous_test_step_id: str = '-1'
+            previous_test_step_id: str = '-1',
+            test_block_name: str = APIConnector.TEST_BLOCK_TEST_NAME
     ) -> str:
         self.call_counter_add_test_step += 1
-        for test_case in self.test_cases:
-            if str(test_case['id']) == test_case_id:
-                new_index: int = self.__find_next_index(test_case['testSteps'])
-                test_case['testSteps'].append({'id': new_index, 'description': test_step})
-                return str(new_index)
+        new_index = str(self.call_counter_add_test_step)
+        test_case: TestCaseModel = self.__get_test_case_by_id(test_case_id)
+        test_block: List[TestStepModel] = test_case.get_test_block_by_name(test_block_name)
+        new_test_step: TestStepModel = TestStepModel(str(self.call_counter_add_test_step), test_step)
+        if previous_test_step_id == '-1':
+            test_block.append(new_test_step)
+            return new_index
+        else:
+            for ts_index, test_step in enumerate(test_block):
+                if test_step.get_identifier() == previous_test_step_id:
+                    test_block.insert(ts_index, new_test_step)
+                    return new_index
+        raise ItemNotFoundError(f'Test step {previous_test_step_id} not found in test case {test_case_id}.')
 
     def remove_test_step(
             self,
             test_case_id: str,
-            test_step_id: str
-    ):
+            test_step_id: str,
+            test_block_name: str = APIConnector.TEST_BLOCK_TEST_NAME
+    ) -> None:
         self.call_counter_remove_test_step += 1
-        for test_case in self.test_cases:
-            if str(test_case['id']) == test_case_id:
-                for index, step in enumerate(test_case['testSteps']):
-                    if str(step['id']) == test_step_id:
-                        test_case['testSteps'].pop(index)
-                        return
-                raise tbcs_client.ItemNotFoundError(f'Test step {test_step_id} not found in test case {test_case_id}.')
-        raise tbcs_client.ItemNotFoundError(f'No test case found with Id {test_case_id}.')
-
-    def create_test_case(
-            self,
-            test_case_name: str,
-            test_case_type: str,
-            external_id: str,
-            test_steps: List[str]
-    ) -> str:
-        self.call_counter_create_test_case += 1
-        new_index: int = self.__find_next_index(self.test_cases)
-        test_case: dict =  {
-            'id': new_index,
-            'name': test_case_name,
-            'testCaseType': test_case_type,
-            'externalId': external_id,
-            'testSteps': [],
-            'executions': []
-        }
-        for index, test_step in enumerate(test_steps):
-            test_case['testSteps'].append({
-                'id': index,
-                'description': test_step
-            })
-        self.test_cases.append(test_case)
-        return str(new_index)
+        test_case: TestCaseModel = self.__get_test_case_by_id(test_case_id)
+        test_block: List[TestStepModel] = test_case.get_test_block_by_name(test_block_name)
+        for ts_index, test_step in enumerate(test_block):
+            if test_step.get_identifier() == test_step_id:
+                test_block.remove(test_step)
+                return
+        raise ItemNotFoundError(f'Test step {test_step_id} not found in test case {test_case_id}.')
 
     def get_test_case_by_external_id(
             self,
             external_id: str
     ) -> dict:
         self.call_counter_get_test_case_by_external_id += 1
-        for test_case in self.test_cases:
-            if test_case['externalId'] == external_id:
-                return test_case
-        raise tbcs_client.ItemNotFoundError(f'No item with external ID {external_id} found.')
+        for tc_index, test_case in enumerate(self.test_cases):
+            if test_case.get_external_id() == external_id:
+                return test_case.to_dict()
+        raise ItemNotFoundError(f'No test case found with externalId {external_id}.')
+
+    def get_test_case_by_id(
+            self,
+            test_case_id: str
+    ) -> dict:
+        self.call_counter_get_test_case_by_id += 1
+        return self.__get_test_case_by_id(test_case_id).to_dict()
 
     def start_execution(
             self,
             test_case_id: str
     ) -> str:
         self.call_counter_start_execution += 1
-        for test_case in self.test_cases:
-            if str(test_case['id']) == test_case_id:
-                new_index: int = self.__find_next_index(test_case['executions'])
-                execution: dict = {
-                    'id': new_index,
-                    'result': self.test_status_in_progress,
-                    'testSequence': {
-                        'testStepBlocks': [{}, {}, {
-                            'steps': []
-                        }]
-                    }
-                }
-                for step in test_case['testSteps']:
-                    execution['testSequence']['testStepBlocks'][2]['steps'].append({
-                        'id': step['id'],
-                        'description': step['description']
-                    })
-                test_case['executions'].append(execution)
-                return str(new_index)
-        raise tbcs_client.ItemNotFoundError(f'No test case with ID {test_case_id}.')
-
-    def get_execution_by_id(
-            self,
-            test_case_id: str,
-            execution_id: str
-    ) -> dict:
-        for test_case in self.test_cases:
-            if str(test_case['id']) == test_case_id:
-                for execution in test_case['executions']:
-                    if str(execution['id']) == execution_id:
-                        return execution
-                raise tbcs_client.ItemNotFoundError(f'No execution with ID {execution_id}.')
-        raise tbcs_client.ItemNotFoundError(f'No test case with ID {test_case_id}.')
+        self.__get_test_case_by_id(test_case_id)
+        return str(self.call_counter_start_execution)
 
     def report_step_result(
             self,
@@ -127,43 +107,34 @@ class MockAPIConnector(tbcs_client.APIConnector):
             execution_id: str,
             test_step_id: str,
             result: str
-    ):
+    ) -> None:
         self.call_counter_report_step_result += 1
-        for test_case in self.test_cases:
-            if str(test_case['id']) == test_case_id:
-                for execution in test_case['executions']:
-                    if str(execution['id']) == execution_id:
-                        for step in execution['testSequence']['testStepBlocks'][2]['steps']:
-                            if str(step['id']) == test_step_id:
-                                step['result'] = result
-                                return
-                        raise tbcs_client.ItemNotFoundError(f'No test step with ID {test_step_id}.')
-                raise tbcs_client.ItemNotFoundError(f'No execution with ID {execution_id}.')
-        raise tbcs_client.ItemNotFoundError(f'No test case with ID {test_case_id}.')
+        self.__get_test_case_by_id(test_case_id).get_test_step_by_id(test_step_id).set_result(result)
 
-    def report_test_case_result(
+    def create_defect(
+            self,
+            name: str,
+            message: str
+    ) -> str:
+        self.call_counter_create_defect += 1
+
+        return str(self.call_counter_create_defect)
+
+    def assign_defect(
             self,
             test_case_id: str,
             execution_id: str,
-            result: str
-    ):
-        self.call_counter_report_test_case_result += 1
-        for test_case in self.test_cases:
-            if str(test_case['id']) == test_case_id:
-                for execution in test_case['executions']:
-                    if str(execution['id']) == execution_id:
-                        execution['result'] = result
-                        return
-                raise tbcs_client.ItemNotFoundError(f'No execution with ID {execution_id}.')
-        raise tbcs_client.ItemNotFoundError(f'No test case with ID {test_case_id}.')
+            test_step_id: str,
+            defect_id: str
+    ) -> None:
+        self.call_counter_assign_defect += 1
+        self.__get_test_case_by_id(test_case_id).get_test_step_by_id(test_step_id)
 
-    @staticmethod
-    def __find_next_index(source: List[dict]):
-        if len(source) == 0:
-            return 0
-        else:
-            max_index: int = 0
-            for item in source:
-                if item['id'] > max_index:
-                    max_index = item['id']
-            return max_index + 1
+    def __get_test_case_by_id(
+            self,
+            test_case_id: str
+    ) -> TestCaseModel:
+        for tc_index, test_case in enumerate(self.test_cases):
+            if test_case.get_identifier() == test_case_id:
+                return test_case
+        raise ItemNotFoundError(f'No test case with ID {test_case_id}.')

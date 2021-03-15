@@ -1,4 +1,5 @@
 *** Settings ***
+Resource    example.resource
 Test Setup    Should Be Equal    1    1
 Test Teardown    Should Be Equal    2    2
 
@@ -8,4 +9,5 @@ First Test
     [Setup]    Should Be Equal    3    3
     Should Be Equal    4    4
     Should Be Equal    5    5
+    Do Something
     [Teardown]    Should Be Equal    6    6
